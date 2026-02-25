@@ -16,4 +16,4 @@
 - Initial project import and cleanup
 - Added automation script for build, deploy, and launch
 - Project structure for Zebra RFID RWDemo
-- Ready for development and deployment on EM45
+- Ready for development and deployment on TC22R
