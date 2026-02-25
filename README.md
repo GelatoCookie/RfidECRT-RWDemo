@@ -22,7 +22,7 @@ This project is an Android demo application for Zebra RFID devices (EM45).
 - `build_deploy_launch.sh` - Automation script
 
 ## Requirements
-- Zebra EM45 device
+- Zebra TC22R device
 - Android SDK
 - Java 8+
 - Gradle (wrapper included)
