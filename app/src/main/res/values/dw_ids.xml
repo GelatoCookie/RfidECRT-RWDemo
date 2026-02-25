@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<item type="id" name="settings_restore_defaults_clicked" />
+	<item type="id" name="edit_profile" />
+	<item type="id" name="rename_profile" />
+	<item type="id" name="delete_profile" />
+	<item type="id" name="clone_profile" />
+</resources>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="dwdemo_logo">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:contentDescription">@string/dwdemo_title</item>
+        <item name="android:src">@drawable/rfid_icon_s</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:paddingTop">4sp</item>
+        <item name="android:paddingLeft">4sp</item>
+        <item name="android:clickable">true</item>
+        </style>
+    <style name="dwdemo_title">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">23sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:text">@string/dwdemo_title</item>
+        <item name="android:paddingTop">4sp</item>
+        <item name="android:paddingLeft">22sp</item>
+        </style>
+    <style name="dwdemo_copyright">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:text">@string/dwdemo_copyright</item>
+        <item name="android:layout_marginLeft">25sp</item>
+        </style>
+    <style name="dwdemo_hr">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">2dip</item>
+        <item name="android:background">#FF00FF00</item>
+        <item name="android:layout_marginTop">5sp</item>
+		<item name="android:layout_marginBottom">5sp</item>
+        </style>
+    <style name="dwdemo_intro">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:text">@string/dwdemo_intro</item>
+        <item name="android:paddingBottom">5sp</item>
+        </style>
+    <style name="dwdemo_editbox">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:textSize">15sp</item>
+        <!--item name="android:text">""</item-->
+        <item name="android:gravity">top</item>
+        <item name="android:scrollHorizontally">false</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:bufferType">spannable</item>
+        </style>
+</resources>

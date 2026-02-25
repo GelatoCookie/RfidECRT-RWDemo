@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+  <style name="Theme.Transparent" parent="android:Theme">
+    <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowIsFloating">false</item>
+    <item name="android:backgroundDimEnabled">true</item>
+     <item name="android:popupMenuStyle">@style/PopupMenu</item>
+ </style>
+ <style name="DWDemoTheme2" parent="@android:style/Theme.NoTitleBar">
+   <item name="android:popupMenuStyle">@style/PopupMenu</item>
+   <item name="android:textColor">@android:color/white</item>  
+ </style>
+ <style name="DWDemoTheme" parent="@android:style/Theme.NoTitleBar">
+     <item name="android:textColor">@android:color/black</item>  
+ </style>
+ <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
+    <item name="android:popupBackground">@color/bg_color1</item>
+ </style>
+ 
+</resources>

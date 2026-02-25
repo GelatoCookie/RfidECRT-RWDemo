@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+	<!-- **************** Basic Data Format params  **************** -->
+
+<bdf-params version="1.0"><!-- Update version number if xml schema changes -->
+
+  <param id="0" type="boolean">
+  	<key>bdf_enabled</key>
+    <title>Enabled</title>
+    <summary>Enable/disable data formating</summary>
+    <default>1</default>
+    <tags>
+      <tag>bdf-param</tag>
+    </tags>
+  </param>
+
+  <param id="1" type="string">
+  	<key>bdf_prefix</key>
+    <title>Prefix</title>
+    <summary>Prefix to data</summary>
+    <default></default>
+    <tags>
+      <tag>bdf-param</tag>
+    </tags>
+  </param>
+
+  <param id="2" type="string">
+  	<key>bdf_suffix</key>
+    <title>Suffix</title>
+    <summary>Suffix to data</summary>
+    <default>0</default>
+    <tags>
+      <tag>bdf-param</tag>
+    </tags>
+  </param>
+
+  <param id="3" type="boolean">
+  	<key>bdf_send_data</key>
+    <title>Send data</title>
+    <summary>Send data</summary>
+    <default>1</default>
+    <tags>
+      <tag>bdf-param</tag>
+    </tags>
+  </param>
+
+  <param id="4" type="boolean">
+  	<key>bdf_send_hex</key>
+    <title>Send hex</title>
+    <summary>Send as hex</summary>
+    <default>0</default>
+    <tags>
+      <tag>bdf-param</tag>
+    </tags>
+  </param>
+
+  <param id="5" type="boolean">
+  	<key>bdf_send_tab</key>
+    <title>Send TAB key</title>
+    <summary>Send TAB key</summary>
+    <default>0</default>
+    <tags>
+      <tag>bdf-param</tag>
+    </tags>
+  </param>
+
+  <param id="6" type="boolean">
+  	<key>bdf_send_enter</key>
+    <title>Send ENTER key</title>
+    <summary>Send ENTER key</summary>
+    <default>0</default>
+    <tags>
+      <tag>bdf-param</tag>
+    </tags>
+  </param>
+
+
+</bdf-params>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.zebra.rfid.rwdemo">
+
+    <application
+        android:exported="true"
+        android:icon="@drawable/rfid_icon_s"
+        android:label="@string/rwdemo_app_name"
+        android:persistent="true"
+        android:resizeableActivity="false"
+        android:theme="@android:style/Theme.DeviceDefault"
+        tools:replace="android:label">
+        <activity android:name=".FriendlyProfilesActivity"
+            android:icon="@drawable/rfid_icon_s"
+            android:label="@string/dwdemo2_app_name"
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
+        </activity>
+        <activity
+            android:name=".RWDemoActivity"
+            android:exported="true"
+            android:icon="@drawable/rfid_icon_s"
+            android:label="@string/dwdemo2_app_name"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.zebra.rfid.rwdemo.RWDEMO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

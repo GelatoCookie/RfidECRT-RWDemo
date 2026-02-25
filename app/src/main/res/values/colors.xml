@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <color name="yellow1">#F9E60E</color>
+   <color name="yellow2">#F9F89D</color>
+   <color name="yellow">#FFFF00</color>
+   <color name="orange4">#F7BE45</color>
+   <color name="orange5">#F7D896</color>
+   <color name="blue2">#19FCDA</color>
+   <color name="blue25">#D9F7F2</color>
+   <color name="grey05">#ACA899</color>
+   <color name="white1">#FFFFFF</color>
+   <color name="white2">#DDDDDD</color>
+   <color name="bg_color1">#ff081620</color>
+   <color name="bg_color2">#ffbfc7cc</color>
+   <color name="bg_color3">#fff5f5f5</color>
+   <color name="bg_color4">#ff33B5E5</color>
+   <color name="line_color1">#2effffff</color>
+   <color name="line_color2">#9e000000</color>
+   <color name="line_color3">#40000000</color>
+   <color name="grad_color_start">#28ffffff</color>
+   <color name="grad_color_end">#00ffffff</color>
+   <color name="transparent">#00000000</color>
+   <color name="zebraWhite">#FFFFFF</color>
+   <color name="zebraBlue">#007CB0</color>
+   <color name="zebraDark">#2E2E2E</color>
+   <color name="zebraGray">#808080</color>
+   <color name="zebraLightBlue">#BBDEFB</color>
+
+</resources>

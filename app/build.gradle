@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'com.zebra.rfid.rwdemo'
+    signingConfigs {
+        config {
+            storeFile file('../RFIDreaderX_KEYSTORE.jks')
+            keyAlias "RFID_READER_X"
+            storePassword System.getenv("KEY_STORE_PWD")
+            keyPassword System.getenv("KEY_PWD")
+        }
+    }
+    compileSdkVersion 34
+    defaultConfig {
+        applicationId "com.zebra.rfid.rwdemo"
+        minSdkVersion 26
+        targetSdkVersion 34
+        versionCode 2
+        versionName "3.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.config
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    compileOnly fileTree(include: ['*.jar'], dir: 'libs')
+    
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
+    constraints {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22")
+    }
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- item
+        android:id="@+id/action_illumination"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_dw_lumin_off" />
+
+    <item
+        android:id="@+id/action_scanner"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_dw_camera" />
+
+    <item
+        android:id="@+id/action_picklist"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_dw_picklist_mode" /-->
+
+    <item
+    android:id="@+id/action_about"
+    android:orderInCategory="100"
+    android:title="@string/dwdemo2_action_about"/>
+
+   <!-- <item
+        android:id="@+id/action_friendly_profiles"
+        android:orderInCategory="100"
+        android:title="@string/dwdemo2_action_friendly_profiles"/>-->
+
+<!--
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/dwdemo2_action_settings"/>
+-->
+
+</menu>
