@@ -15,12 +15,15 @@ android {
         applicationId "com.zebra.rfid.rwdemo"
         minSdkVersion 26
         targetSdkVersion 34
-        versionCode 2
-        versionName "3.1"
+        versionCode 3
+        versionName "1.0.6.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
     }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

@@ -6,6 +6,8 @@ set -e
 WORKDIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$WORKDIR"
 
+APP_ID="com.zebra.rfid.rwdemo.debug"
+
 # 1. Build the APK
 echo "Building APK..."
 ./gradlew assembleDebug
@@ -30,6 +32,6 @@ echo "Deploying APK to device $DEVICE..."
 adb -s "$DEVICE" install -r "$APK_PATH"
 
 echo "Launching app..."
-adb -s "$DEVICE" shell monkey -p com.zebra.rfid.rwdemo -c android.intent.category.LAUNCHER 1
+adb -s "$DEVICE" shell monkey -p "$APP_ID" -c android.intent.category.LAUNCHER 1
 
 echo "App launched on $DEVICE."

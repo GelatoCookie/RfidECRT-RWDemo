@@ -22,6 +22,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -549,7 +550,7 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
 
             // Try to load the a package matching the name of our own package
             PackageInfo pInfo;
-            String versionInfo = "1.0.6.0";
+            String versionInfo = "1.0.6.1";
             int msgPadding = 5;
 
             String aboutTitle = context.getString(R.string.dwdemo2_about_title);
@@ -667,7 +668,11 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         IntentFilter filter = new IntentFilter();
         filter.addAction(RESULT_ACTION);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
-        registerReceiver(datawedgeBroadcastReceiver, filter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(datawedgeBroadcastReceiver, filter, Context.RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(datawedgeBroadcastReceiver, filter);
+        }
     }
 
 }

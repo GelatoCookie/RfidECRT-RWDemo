@@ -16,7 +16,7 @@
     <string name="dwdemo2_content_description">Rfid DW Demo v0.1</string>
     <string name="dwdemo2_about_title">About RWDemo</string>
     <string name="dwdemo2_about_version">"Version: %s"</string>
-    <string name="dwdemo2_about_text">RWDemo is an application that uses DataWedge to read RFID tag data. RWDemo uses the DataWedge Intent output plug-in to receive data.</string>
+    <string name="dwdemo2_about_text">ECRT RWDemo is an application that uses DataWedge to read RFID tag data and Barcode. RWDemo uses the DataWedge Intent output plug-in to receive data.\nTested TC22R</string>
     <string name="dwdemo2_about_copyright" translatable="false">\u00A9 2019 Zebra Technologies Corporation and/or its affiliates.</string>
     <string name="dwdemo2_about_allrights">All rights reserved.</string>
 

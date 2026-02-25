@@ -2,6 +2,11 @@
 
 This project is an Android demo application for Zebra RFID devices (EM45).
 
+## Current Release
+- Version: 1.0.6.1
+- Fixes Android 13+ receiver registration SecurityException
+- Uses debug package `com.zebra.rfid.rwdemo.debug` for deploy script to avoid persistent system app update conflicts
+
 ## Features
 - RFID tag reading and management
 - Sample UI for device interaction
