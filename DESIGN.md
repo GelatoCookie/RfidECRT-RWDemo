@@ -23,10 +23,10 @@ This project is an Android application designed for Zebra RFID devices, specific
 
 ### Platform Compatibility Notes
 - Android 13+ broadcast receiver registration uses exported receiver flag for DataWedge result intent handling
-- Deployment script launches debug build package ID (`com.zebra.rfid.rwdemo.debug`) to avoid persistent preloaded package replacement restrictions on EM45
+- Deployment script launches debug build package ID (`com.zebra.rfid.rwdemo.debug`) to avoid persistent preloaded package replacement restrictions on TC22R
 
 ### Build & Deployment
-- Use the provided shell script for automated build, deployment, and launch on EM45
+- Use the provided shell script for automated build, deployment, and launch on TC22R
 - Gradle wrapper included for consistent builds
 
 ### Extensibility
