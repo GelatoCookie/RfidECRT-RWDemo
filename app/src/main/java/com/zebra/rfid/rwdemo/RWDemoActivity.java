@@ -83,8 +83,8 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
 
     public static boolean DEBUG = false;
 
-    private static float disabledButtonAlphaVlue = 0.2f;
-    private static float enabledButtonAlphaVlue = 1f;
+    private static float disabledButtonAlphaValue = 0.2f;
+    private static float enabledButtonAlphaValue = 1f;
     private static Context thisContext = null;
     private static boolean rwDemoProfileActivated = false;
     private static ProgressBar progressBar;
@@ -97,6 +97,9 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
     private ImageButton actionBtnReaderSelection;
     private ImageButton actionBtnFriendlyProfiles;
     private ImageButton actionBtnSettings;
+    private TextView scannerStatus;
+    private TextView rfidStatus;
+    private TextView readerStatus;
 
     private static int DW_DEMO_POPUP_MENU_SETTINGS = 1;
 
@@ -120,6 +123,15 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         setConfigBundle.putParcelableArray(RWDemoIntentParams.BUNDLE_EXTRA_APP_LIST_KEY, new Bundle[]{appConfig});
         setConfigBundle.remove(RWDemoIntentParams.BUNDLE_EXTRA_PLUGIN_CONFIG);
 
+        // Barcode Input configurations (Disabled)
+        Bundle barcodeConfigParamList = new Bundle();
+        barcodeConfigParamList.putString(RWDemoIntentParams.BARCODE_ENABLED_KEY, RWDemoIntentParams.BARCODE_ENABLED_VALUE);
+
+        Bundle barcodeConfigBundle = new Bundle();
+        barcodeConfigBundle.putString(RWDemoIntentParams.BUNDLE_EXTRA_PLUGIN_NAME, RWDemoIntentParams.PLUGIN_NAME_BARCODE);
+        barcodeConfigBundle.putString(RWDemoIntentParams.BUNDLE_EXTRA_RESET_CONFIG_KEY, RWDemoIntentParams.BUNDLE_EXTRA_RESET_CONFIG_VAL);
+        barcodeConfigBundle.putBundle(RWDemoIntentParams.BUNDLE_EXTRA_PARAM_LIST, barcodeConfigParamList);
+
         // RFID Input configurations
         Bundle rfidConigParamList = new Bundle();
         rfidConigParamList.putString(RWDemoIntentParams.PLUGIN_ENABLE_PARAM_KEY, RWDemoIntentParams.PLUGIN_ENABLE_PARAM_VAL);
@@ -133,6 +145,9 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         rfidFormattingConfigBundle.putString(RWDemoIntentParams.BUNDLE_EXTRA_PLUGIN_NAME, RWDemoIntentParams.PLUGIN_NAME_RFID_F);
         rfidFormattingConfigBundle.putString(RWDemoIntentParams.BUNDLE_EXTRA_OUTPUT_PLUGIN_NAME, RWDemoIntentParams.PLUGIN_NAME_INTENT);
         rfidFormattingConfigBundle.putString(RWDemoIntentParams.BUNDLE_EXTRA_RESET_CONFIG_KEY, RWDemoIntentParams.BUNDLE_EXTRA_RESET_CONFIG_VAL);
+        Bundle rfidFormattingParamList = new Bundle();
+        rfidFormattingParamList.putString(RWDemoIntentParams.PLUGIN_RFID_F_ENABLE_PARAM, RWDemoIntentParams.PLUGIN_RFID_F_ENABLE_VALUE);
+        rfidFormattingConfigBundle.putBundle(RWDemoIntentParams.BUNDLE_EXTRA_PARAM_LIST, rfidFormattingParamList);
 
         // Configure intent output for captured data to be sent to this app
         Bundle intentConfig = new Bundle();
@@ -155,6 +170,7 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
 
 
         ArrayList<Parcelable> configBundles = new ArrayList<>();
+        configBundles.add(barcodeConfigBundle);
         configBundles.add(rfidConfigBundle);
         configBundles.add(rfidFormattingConfigBundle);
         configBundles.add(intentConfig);
@@ -197,6 +213,9 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         tv.setText(tvText);
         scrollDown();
 
+        scannerStatus = (TextView) findViewById(R.id.scannerStatus);
+        rfidStatus = (TextView) findViewById(R.id.rfidStatus);
+        readerStatus = (TextView) findViewById(R.id.readerStatus);
 
         softScanTrigger = (ImageButton) findViewById(R.id.softscanbutton);
         softScanTrigger.setOnClickListener(v -> {
@@ -255,8 +274,7 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         rwDemoProfileActivated = false;
 
         if(!onNewIntentToOnResume){
-            softScanTrigger.setEnabled(false);
-            softScanTrigger.setAlpha(disabledButtonAlphaVlue);
+            setSoftScanTriggerEnabled(false);
 
             RelativeLayout progressBarLayout = findViewById(R.id.relativeLayout1);
             progressBarLayout.setVisibility(View.VISIBLE);
@@ -311,6 +329,19 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
 
     }
 
+    private void setSoftScanTriggerEnabled(boolean enabled) {
+        softScanTrigger.setEnabled(enabled);
+        if (enabled) {
+            softScanTrigger.setAlpha(enabledButtonAlphaValue);
+            rfidStatus.setText("RFID: READY");
+            readerStatus.setText("RD: CONNECTED");
+        } else {
+            softScanTrigger.setAlpha(disabledButtonAlphaValue);
+            rfidStatus.setText("RFID: Disabled");
+            readerStatus.setText("RD: Disconnected");
+        }
+    }
+
 
     @Override
     public void onStart() {
@@ -326,6 +357,18 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         progressBar.setVisibility(View.GONE);
 
         try {
+            // Unregister for notifications
+            Intent intent = new Intent();
+            intent.setAction(RWDemoIntentParams.ACTION_NOTIFICATION_UNREGISTER);
+            intent.putExtra(RWDemoIntentParams.EXTRA_UNREGISTER_NOTIFICATION, RWDemoIntentParams.NOTIFICATION_TYPE_SCANNER);
+            sendBroadcast(intent);
+
+            intent.putExtra(RWDemoIntentParams.EXTRA_UNREGISTER_NOTIFICATION, RWDemoIntentParams.NOTIFICATION_TYPE_RFID);
+            sendBroadcast(intent);
+
+            intent.putExtra(RWDemoIntentParams.EXTRA_UNREGISTER_NOTIFICATION, RWDemoIntentParams.NOTIFICATION_TYPE_READER);
+            sendBroadcast(intent);
+
             //Un-register broadcast receiver when you receive profile list broadcast
             unregisterReceiver(datawedgeBroadcastReceiver);
         } catch (IllegalArgumentException e) {
@@ -481,9 +524,11 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         if (scanState == true) {
             i.putExtra(RWDemoIntentParams.ACTION_EXTRA_SOFT_RFID_TRIGGER, DWAPI_STOP_SCANNING);
             scanState = false;
+            rfidStatus.setText("RFID: stopped");
         } else {
             i.putExtra(RWDemoIntentParams.ACTION_EXTRA_SOFT_RFID_TRIGGER, DWAPI_START_SCANNING);
             scanState = true;
+            rfidStatus.setText("RFID: reading");
         }
         Log.d(TAG, "toggleSoftScanTrigger END scanState is:" + scanState);
         this.sendBroadcast(i);
@@ -523,6 +568,7 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         }
 
         if (data_len > 0) {
+            rfidStatus.setText("RFID: reading");
             TextView tv = (TextView) findViewById(R.id.output_view);
             if (tvText.length() > 0) {
                 tvText += ENDLINE_CHAR;
@@ -640,8 +686,7 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
             if (intent.hasExtra(RESULT_GET_ACTIVE_PROFILE)) {
                 if(intent.getExtras().getString(RESULT_GET_ACTIVE_PROFILE).equals(RWDemoIntentParams.BUNDLE_EXTRA_PROFILE_NAME_VAL)) {
                     rwDemoProfileActivated = true;
-                    softScanTrigger.setEnabled(true);
-                    softScanTrigger.setAlpha(enabledButtonAlphaVlue);
+                    setSoftScanTriggerEnabled(true);
                     progressBar.setVisibility(View.GONE);
                     scanState = false;
                 }
@@ -658,6 +703,30 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
                     createProfile();
                 }
             }
+
+            if (intent.getAction().equals(RWDemoIntentParams.ACTION_NOTIFICATION)) {
+                if (intent.hasExtra(RWDemoIntentParams.EXTRA_NOTIFICATION_INFO)) {
+                    Bundle b = intent.getBundleExtra(RWDemoIntentParams.EXTRA_NOTIFICATION_INFO);
+                    String status = b.getString("STATUS");
+                    String type = b.getString("NOTIFICATION_TYPE");
+
+                    if (status != null && type != null) {
+                        if (type.equals(RWDemoIntentParams.NOTIFICATION_TYPE_SCANNER)) {
+                            scannerStatus.setText("S: " + status);
+                        } else if (type.equals(RWDemoIntentParams.NOTIFICATION_TYPE_RFID)) {
+                            if (status.equalsIgnoreCase("SCANNING")) {
+                                rfidStatus.setText("RFID: reading");
+                            } else if (status.equalsIgnoreCase("WAITING") || status.equalsIgnoreCase("READY")) {
+                                rfidStatus.setText("RFID: stopped");
+                            } else {
+                                rfidStatus.setText("RFID: " + status);
+                            }
+                        } else if (type.equals(RWDemoIntentParams.NOTIFICATION_TYPE_READER)) {
+                            readerStatus.setText("RD: " + status);
+                        }
+                    }
+                }
+            }
         }
     };
 
@@ -667,12 +736,25 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
     private void registerReceivers() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(RESULT_ACTION);
+        filter.addAction(RWDemoIntentParams.ACTION_NOTIFICATION);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(datawedgeBroadcastReceiver, filter, Context.RECEIVER_EXPORTED);
         } else {
             registerReceiver(datawedgeBroadcastReceiver, filter);
         }
+
+        // Register for notifications
+        registerForNotification(RWDemoIntentParams.NOTIFICATION_TYPE_SCANNER);
+        registerForNotification(RWDemoIntentParams.NOTIFICATION_TYPE_RFID);
+        registerForNotification(RWDemoIntentParams.NOTIFICATION_TYPE_READER);
+    }
+
+    private void registerForNotification(String type) {
+        Intent intent = new Intent();
+        intent.setAction(RWDemoIntentParams.ACTION_NOTIFICATION_REGISTER);
+        intent.putExtra(RWDemoIntentParams.EXTRA_REGISTER_NOTIFICATION, type);
+        sendBroadcast(intent);
     }
 
 }

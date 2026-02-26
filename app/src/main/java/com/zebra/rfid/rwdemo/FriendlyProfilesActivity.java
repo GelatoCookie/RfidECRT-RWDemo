@@ -126,6 +126,15 @@ public class FriendlyProfilesActivity extends AppCompatActivity {
         setConfigBundle.putParcelableArray(RWDemoIntentParams.BUNDLE_EXTRA_APP_LIST_KEY, new Bundle[]{appConfig});
         setConfigBundle.remove(RWDemoIntentParams.BUNDLE_EXTRA_PLUGIN_CONFIG);
 
+        // Barcode Input configurations (Disabled)
+        Bundle barcodeConfigParamList = new Bundle();
+        barcodeConfigParamList.putString(RWDemoIntentParams.BARCODE_ENABLED_KEY, RWDemoIntentParams.BARCODE_ENABLED_VALUE);
+
+        Bundle barcodeConfigBundle = new Bundle();
+        barcodeConfigBundle.putString(RWDemoIntentParams.BUNDLE_EXTRA_PLUGIN_NAME, RWDemoIntentParams.PLUGIN_NAME_BARCODE);
+        barcodeConfigBundle.putString(RWDemoIntentParams.BUNDLE_EXTRA_RESET_CONFIG_KEY, RWDemoIntentParams.BUNDLE_EXTRA_RESET_CONFIG_VAL);
+        barcodeConfigBundle.putBundle(RWDemoIntentParams.BUNDLE_EXTRA_PARAM_LIST, barcodeConfigParamList);
+
         // RFID Input configurations
         Bundle rfidConigParamList = new Bundle();
         rfidConigParamList.putString(RWDemoIntentParams.PLUGIN_ENABLE_PARAM_KEY, RWDemoIntentParams.PLUGIN_ENABLE_PARAM_VAL);
@@ -143,6 +152,9 @@ public class FriendlyProfilesActivity extends AppCompatActivity {
         rfidFormattingConfigBundle.putString(RWDemoIntentParams.BUNDLE_EXTRA_PLUGIN_NAME, RWDemoIntentParams.PLUGIN_NAME_RFID_F);
         rfidFormattingConfigBundle.putString(RWDemoIntentParams.BUNDLE_EXTRA_OUTPUT_PLUGIN_NAME, RWDemoIntentParams.PLUGIN_NAME_INTENT);
         rfidFormattingConfigBundle.putString(RWDemoIntentParams.BUNDLE_EXTRA_RESET_CONFIG_KEY, RWDemoIntentParams.BUNDLE_EXTRA_RESET_CONFIG_VAL);
+        Bundle rfidFormattingParamList = new Bundle();
+        rfidFormattingParamList.putString(RWDemoIntentParams.PLUGIN_RFID_F_ENABLE_PARAM, RWDemoIntentParams.PLUGIN_RFID_F_ENABLE_VALUE);
+        rfidFormattingConfigBundle.putBundle(RWDemoIntentParams.BUNDLE_EXTRA_PARAM_LIST, rfidFormattingParamList);
 
         // Configure intent output for captured data to be sent to this app
         Bundle intentConfig = new Bundle();
@@ -157,6 +169,7 @@ public class FriendlyProfilesActivity extends AppCompatActivity {
 
 
         ArrayList<Parcelable> configBundles = new ArrayList<>();
+        configBundles.add(barcodeConfigBundle);
         configBundles.add(rfidConfigBundle);
         configBundles.add(rfidFormattingConfigBundle);
         configBundles.add(intentConfig);

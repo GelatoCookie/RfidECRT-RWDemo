@@ -17,6 +17,17 @@ public class RWDemoIntentParams {
     public static final String ACTION_EXTRA_SET_CONFIG  = "com.symbol.datawedge.api.SET_CONFIG";
     public static final String ACTION_EXTRA_GET_CONFIG  = "com.symbol.datawedge.api.GET_CONFIG";
 
+    // Notification API
+    public static final String ACTION_NOTIFICATION_REGISTER = "com.symbol.datawedge.api.ACTION_NOTIFICATION_REGISTER";
+    public static final String ACTION_NOTIFICATION_UNREGISTER = "com.symbol.datawedge.api.ACTION_NOTIFICATION_UNREGISTER";
+    public static final String EXTRA_REGISTER_NOTIFICATION = "com.symbol.datawedge.api.REGISTER_FOR_NOTIFICATION";
+    public static final String EXTRA_UNREGISTER_NOTIFICATION = "com.symbol.datawedge.api.UNREGISTER_FOR_NOTIFICATION";
+    public static final String NOTIFICATION_TYPE_SCANNER = "SCANNER_STATUS";
+    public static final String NOTIFICATION_TYPE_RFID = "RFID_STATUS";
+    public static final String NOTIFICATION_TYPE_READER = "READER_STATUS";
+    public static final String ACTION_NOTIFICATION = "com.symbol.datawedge.api.NOTIFICATION_ACTION";
+    public static final String EXTRA_NOTIFICATION_INFO = "com.symbol.datawedge.api.NOTIFICATION";
+
     // Profile name
     public static final String BUNDLE_EXTRA_PROFILE_NAME_KEY = "PROFILE_NAME";
     public static final String BUNDLE_EXTRA_PROFILE_NAME_VAL = "RWDemo";
@@ -56,10 +67,16 @@ public class RWDemoIntentParams {
     // Plugin names
     public static final String BUNDLE_EXTRA_PLUGIN_NAME = "PLUGIN_NAME";
 
+    // Barcode Plugin params
+    public final static String PLUGIN_NAME_BARCODE = "BARCODE";
+    public final static String BARCODE_ENABLED_KEY = "scanner_input_enabled";
+    public final static String BARCODE_ENABLED_VALUE = "false";
+
     // RFID Plugin params
     public final static String PLUGIN_NAME_RFID = "RFID";
     public final static String PLUGIN_NAME_RFID_F = "RFID_F";
     public final static String PLUGIN_RFID_F_ENABLE_PARAM = "rfidf_enabled";
+    public final static String PLUGIN_RFID_F_ENABLE_VALUE = "true";
     public static final String RFID_TAG_READ_DURATION_PARAM = "rfidf_tag_read_duration";
 
     // Output plugin params
@@ -107,4 +124,3 @@ public class RWDemoIntentParams {
 
 
 }
-

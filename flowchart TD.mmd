@@ -1,0 +1,17 @@
+flowchart TD
+    A[App Start] --> B[Register Broadcast Receiver]
+    B --> C[Send Intent to DataWedge]
+    C --> D[Receive DataWedge Notification]
+    D --> E{Notification Type}
+    E --> F[Profile List]
+    E --> G[Active Profile]
+    E --> H[Scanner/RFID/Reader Status]
+    F --> I[Check for RWDemo Profile]
+    I -->|Not Found| J[Create RWDemo Profile]
+    I -->|Found| K[Continue]
+    G --> L[Enable Soft Scan Trigger]
+    H --> M[Update Status UI]
+    D --> N[Receive Data Intent]
+    N --> O[Extract Data from Intent]
+    O --> P[Update Output View]
+    P --> Q[Scroll Output]
