@@ -46,6 +46,16 @@ adb shell am start -n com.zebra.rfid.rwdemo.debug/com.zebra.rfid.rwdemo.RWDemoAc
 - `build_deploy_launch.sh` build/deploy/launch helper
 - `DESIGN.md` architecture and behavior notes
 
+## Design Flowchart
+
+![RWDemo Design Flowchart](RWDemoDesignFlowChart.png)
+
+Flow summary:
+- Register DataWedge receivers and request profile state.
+- Ensure `RWDemo` profile exists and activate soft scan trigger.
+- Receive scanner/RFID/reader notifications and update status UI.
+- Handle RFID intent payloads, dedupe tag rows, and update `Total`/`Unique` counters.
+
 ## Notes
 - Android 13+ receiver registration path is supported.
 - Debug build uses package `com.zebra.rfid.rwdemo.debug`.
