@@ -77,6 +77,17 @@
                 android:textColor="@color/white2"
                 android:textSize="12sp" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/readCountStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingRight="10dp"
+            android:gravity="right"
+            android:text="Total: 0  Unique: 0"
+            android:textColor="@color/white2"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <!-- Soft scan button -->

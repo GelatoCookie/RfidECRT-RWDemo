@@ -1,3 +1,16 @@
+# Release Note: 1.0.6.2
+
+## Version: 1.0.6.2
+
+- Added unique-tag display behavior in the result output (`output_view`) to prevent duplicate rows.
+- Added read counters in UI (`Total` and `Unique`) and live status updates during decode.
+- Added new read-session behavior to clear previous data automatically when reading starts.
+- Updated dedupe normalization to ignore case, whitespace, and hyphens for tag uniqueness.
+- Updated project/app version to 1.0.6.2 and refreshed copyright year to 2026.
+- Updated `README.md` and `DESIGN.md` with current architecture, behavior, and troubleshooting.
+
+---
+
 # Release Note: 1.0.6.1
 
 ## Version: 1.0.6.1

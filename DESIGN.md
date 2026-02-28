@@ -1,103 +1,97 @@
-# DESIGN.md
+# Zebra RFID RWDemo - Design
 
-## Project: Zebra RFID RWDemo
+## Scope
+Android demo app that reads RFID data through Zebra DataWedge intent APIs and renders live status + tag results.
 
-### Release Version
-- 1.0.6.1
+Current implementation focus:
+- stable profile setup and activation
+- reliable status updates (scanner / RFID / reader)
+- session-based read UX with deduped output and counters
 
-### Overview
-This project is an Android application designed for Zebra RFID devices, specifically targeting the EM45 hardware. It demonstrates RFID reading, device interaction, and provides a sample UI for RFID operations.
+## Runtime Architecture
 
-### Architecture
-- **Language:** Java
-- **Build System:** Gradle
-- **Structure:**
-  - `app/` contains the main Android application code
-  - `libs/` contains third-party and Zebra-provided libraries
-  - `build_deploy_launch.sh` automates build, deploy, and launch
+### Main components
+- `RWDemoActivity`: app entry point, DataWedge registration, decode handling, UI updates
+- `RWDemoIntentParams`: constants for DataWedge actions/extras
+- `FriendlyProfilesActivity`: optional preset profile configuration sample
 
-### Key Components
-- **RWDemoActivity:** Main activity for user interaction
-- **RWDemoIntentParams:** Intent parameter definitions for RFID operations
-- **FriendlyProfilesActivity:** Example of profile management
+### Data path
+1. App registers receiver for DataWedge result + notification actions.
+2. App ensures `RWDemo` profile exists/active.
+3. DataWedge sends RFID payload in intent extras.
+4. `handleDecodeData(Intent)` parses payload and updates counters/output.
 
-### Platform Compatibility Notes
-- Android 13+ broadcast receiver registration uses exported receiver flag for DataWedge result intent handling
-- Deployment script launches debug build package ID (`com.zebra.rfid.rwdemo.debug`) to avoid persistent preloaded package replacement restrictions on TC22R
+## UI Contract
 
-### Build & Deployment
-- Use the provided shell script for automated build, deployment, and launch on TC22R
-- Gradle wrapper included for consistent builds
+Header status fields in `dwdemo_main.xml`:
+- `scannerStatus`: scanner state (`S: ...`)
+- `rfidStatus`: RFID state (`RFID: reading/stopped/...`)
+- `readerStatus`: reader state (`RD: ...`)
+- `readCountStatus`: running counters (`Total: X  Unique: Y`)
 
-### Extensibility
-- Modular structure for adding new features or device support
-- Easy integration with additional Zebra SDKs
+Result area:
+- `output_view` shows only first-seen tags for current reading session.
 
-## Scanner and RFID Status Update
+## Reading Session Behavior
 
-The application updates scanner and RFID status in real-time using Android broadcast receivers and UI elements:
+### Session start
+When reading starts (soft trigger start or RFID SCANNING notification):
+- previous output is cleared
+- total/unique counters reset
+- session flag is marked active
 
-- **Broadcast Receiver:**
-  - The `datawedgeBroadcastReceiver` listens for DataWedge notifications and profile changes.
-  - It handles actions such as `ACTION_NOTIFICATION` and updates status fields based on received notification type and status.
+### During session
+- every incoming row increments **Total**
+- **Unique** increments only when dedupe key is new
+- only newly unique rows are appended to `output_view`
 
-- **Status UI Elements:**
-  - `scannerStatus`, `rfidStatus`, and `readerStatus` are `TextView` elements in the main activity.
-  - When a notification is received:
-    - **Scanner:** Updates with the current scanner status (e.g., "S: READY").
-    - **RFID:** Updates with RFID state (e.g., "RFID: reading", "RFID: stopped").
-    - **Reader:** Updates with reader connection state (e.g., "RD: CONNECTED").
+### Session stop
+When reading stops:
+- session flag resets
+- next start triggers a fresh clear/reset
 
-- **Soft Scan Trigger:**
-  - The soft scan button enables/disables RFID reading and updates the status accordingly.
+## Dedupe Rules
 
-## Data Delivery
+For each row:
+1. trim leading/trailing whitespace
+2. skip empty rows
+3. normalize dedupe key by removing whitespace and hyphen (`[\\s-]`)
+4. lowercase using `Locale.ROOT`
 
-- **Intent API:**
-  - DataWedge delivers scanned RFID tag data to the app via Android intents.
-  - The main activity receives intents containing tag data and source information.
+Equivalent examples (same unique key):
+- `AB-CD`
+- `AB CD`
+- `abcd`
 
-- **Data Handling:**
-  - The `handleDecodeData(Intent i)` method extracts data from the intent and updates the output view.
-  - If RFID data is present, it is appended to the display and the scroll view is updated.
-  - MSR (magstripe) data is handled separately and displayed as encrypted if present.
+## Platform Notes
+- Android 13+ receiver registration uses `Context.RECEIVER_EXPORTED`.
+- Debug deployment package ID is `com.zebra.rfid.rwdemo.debug`.
 
-- **UI Update:**
-  - The output view (`TextView`) is updated with new data, and the scroll view automatically scrolls to show the latest entry.
+## Build and Deploy
+- Build: `./gradlew assembleDebug`
+- APK: `app/build/outputs/apk/debug/app-debug.apk`
+- Install: `adb install -r app/build/outputs/apk/debug/app-debug.apk`
+- Launch: `adb shell am start -n com.zebra.rfid.rwdemo.debug/com.zebra.rfid.rwdemo.RWDemoActivity`
 
-## DataWedge Registration, Data Reception, and Initialization Flowchart
+## Future Cleanup Candidates
+- replace deprecated APIs (`setBackgroundDrawable`, legacy `getColor`/`getDrawable` patterns)
+- reduce static mutable activity fields
+- extract decode/session logic into testable helper class
 
-```mermaid
-flowchart TD
-    A[App Start] --> B[Register Broadcast Receiver]
-    B --> C[Send Intent to DataWedge]
-    C --> D[Receive DataWedge Notification]
-    D --> E{Notification Type}
-    E --> F[Profile List]
-    E --> G[Active Profile]
-    E --> H[Scanner/RFID/Reader Status]
-    F --> I[Check for RWDemo Profile]
-    I -->|Not Found| J[Create RWDemo Profile]
-    I -->|Found| K[Continue]
-    G --> L[Enable Soft Scan Trigger]
-    H --> M[Update Status UI]
-    D --> N[Receive Data Intent]
-    N --> O[Extract Data from Intent]
-    O --> P[Update Output View]
-    P --> Q[Scroll Output]
-```
+## Diagnostics and Operations
 
-**Flow Description:**
-- The app starts and registers a broadcast receiver for DataWedge notifications.
-- It sends an intent to DataWedge to initialize and request profile information.
-- Upon receiving notifications, it checks the notification type:
-  - Profile list: Checks for the RWDemo profile and creates it if missing.
-  - Active profile: Enables the scan trigger.
-  - Status notifications: Updates scanner, RFID, and reader status UI.
-- When data is received via intent, it is extracted and displayed in the output view, with the scroll view updated.
+### Expected runtime signals
+- `scannerStatus` changes with scanner notifications.
+- `rfidStatus` should move between `reading` and `stopped`.
+- `readCountStatus` should increment on incoming data (`Total`) and first-seen tags (`Unique`).
 
----
+### Quick verification sequence
+1. Build and deploy debug APK.
+2. Launch app and confirm status fields are populated.
+3. Start reading and confirm previous session data is cleared once.
+4. Scan repeated tag variants (case/space/hyphen differences) and verify dedupe behavior.
 
-**Summary:**
-- Status updates are driven by DataWedge notifications and reflected in the UI.
-- Data delivery uses Android intents, processed and displayed in real-time.
+### Common failure points
+- Missing Gradle wrapper JAR prevents build.
+- No active `adb` device prevents deploy.
+- DataWedge profile not active prevents intent delivery.

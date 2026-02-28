@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2019 Zebra Technologies Corporation and/or its affiliates.
+ * Copyright (C) 2026 Zebra Technologies Corporation and/or its affiliates.
  * All rights reserved.
  */
 package com.zebra.rfid.rwdemo;

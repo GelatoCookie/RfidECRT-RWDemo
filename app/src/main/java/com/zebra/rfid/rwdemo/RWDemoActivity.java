@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2019 Zebra Technologies Corporation and/or its affiliates.
+    /**
+ * Copyright (C) 2026 Zebra Technologies Corporation and/or its affiliates.
  * All rights reserved.
  */
 package com.zebra.rfid.rwdemo;
@@ -43,7 +43,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import static com.zebra.rfid.rwdemo.RWDemoIntentParams.GET_ACTIVE_PROFILE;
 import static com.zebra.rfid.rwdemo.RWDemoIntentParams.RESULT_ACTION;
@@ -100,6 +103,11 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
     private TextView scannerStatus;
     private TextView rfidStatus;
     private TextView readerStatus;
+    private TextView readCountStatus;
+    private int totalReadCount = 0;
+    private final Set<String> uniqueReads = new HashSet<>();
+    private String scannerStateText = "UNKNOWN";
+    private boolean isReadingSessionActive = false;
 
     private static int DW_DEMO_POPUP_MENU_SETTINGS = 1;
 
@@ -216,6 +224,9 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         scannerStatus = (TextView) findViewById(R.id.scannerStatus);
         rfidStatus = (TextView) findViewById(R.id.rfidStatus);
         readerStatus = (TextView) findViewById(R.id.readerStatus);
+        readCountStatus = (TextView) findViewById(R.id.readCountStatus);
+        updateScannerStatus();
+        updateReadCountStatus();
 
         softScanTrigger = (ImageButton) findViewById(R.id.softscanbutton);
         softScanTrigger.setOnClickListener(v -> {
@@ -232,9 +243,7 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         actionBtnClear = (ImageButton) findViewById(R.id.actionButton1);
         actionBtnClear.setOnClickListener(v -> {
             if (v.getId() == actionBtnClear.getId()) {
-                TextView tv1 = (TextView) findViewById(R.id.output_view);
-                tv1.setText("");
-                tvText = "";
+                clearReadResults();
             }
 
         });
@@ -524,8 +533,13 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         if (scanState == true) {
             i.putExtra(RWDemoIntentParams.ACTION_EXTRA_SOFT_RFID_TRIGGER, DWAPI_STOP_SCANNING);
             scanState = false;
+            isReadingSessionActive = false;
             rfidStatus.setText("RFID: stopped");
         } else {
+            if (!isReadingSessionActive) {
+                clearReadResults();
+            }
+            isReadingSessionActive = true;
             i.putExtra(RWDemoIntentParams.ACTION_EXTRA_SOFT_RFID_TRIGGER, DWAPI_START_SCANNING);
             scanState = true;
             rfidStatus.setText("RFID: reading");
@@ -541,6 +555,56 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         onNewIntentToOnResume = true;
         final Intent intent = i;
         handleDecodeData(intent);
+    }
+
+    private void updateScannerStatus() {
+        if (scannerStatus != null) {
+            scannerStatus.setText("S: " + scannerStateText);
+        }
+    }
+
+    private void updateReadCountStatus() {
+        if (readCountStatus != null) {
+            readCountStatus.setText("Total: " + totalReadCount + "  Unique: " + uniqueReads.size());
+        }
+    }
+
+    private void clearReadResults() {
+        TextView outputView = (TextView) findViewById(R.id.output_view);
+        if (outputView != null) {
+            outputView.setText("");
+        }
+        tvText = "";
+        totalReadCount = 0;
+        uniqueReads.clear();
+        updateReadCountStatus();
+    }
+
+    private String getNewUniqueReadsForDisplay(String data) {
+        if (data == null || data.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder newUniqueReads = new StringBuilder();
+        String[] reads = data.split("\\r?\\n");
+        for (String read : reads) {
+            if (read != null) {
+                String normalized = read.trim();
+                if (!normalized.isEmpty()) {
+                    totalReadCount++;
+                    String dedupeKey = normalized
+                            .replaceAll("[\\s-]", "")
+                            .toLowerCase(Locale.ROOT);
+                    if (uniqueReads.add(dedupeKey)) {
+                        if (newUniqueReads.length() > 0) {
+                            newUniqueReads.append(ENDLINE_CHAR);
+                        }
+                        newUniqueReads.append(normalized);
+                    }
+                }
+            }
+        }
+        return newUniqueReads.toString();
     }
 
     private void handleDecodeData(Intent i) {
@@ -569,18 +633,22 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
 
         if (data_len > 0) {
             rfidStatus.setText("RFID: reading");
-            TextView tv = (TextView) findViewById(R.id.output_view);
-            if (tvText.length() > 0) {
-                tvText += ENDLINE_CHAR;
-            }
-            tvText += data;
+            String newUniqueData = getNewUniqueReadsForDisplay(data);
+            updateReadCountStatus();
+            if (!newUniqueData.isEmpty()) {
+                TextView tv = (TextView) findViewById(R.id.output_view);
+                if (tvText.length() > 0) {
+                    tvText += ENDLINE_CHAR;
+                }
+                tvText += newUniqueData;
 
-            tv.setText(tvText);
-            ScrollView sv = (ScrollView) findViewById(R.id.scrollView1);
-            sv.post(() -> {
-                ScrollView svr = (ScrollView) findViewById(R.id.scrollView1);
-                svr.fullScroll(View.FOCUS_DOWN);
-            });
+                tv.setText(tvText);
+                ScrollView sv = (ScrollView) findViewById(R.id.scrollView1);
+                sv.post(() -> {
+                    ScrollView svr = (ScrollView) findViewById(R.id.scrollView1);
+                    svr.fullScroll(View.FOCUS_DOWN);
+                });
+            }
         }
         setIntent(null);
         mDataIntent = null;
@@ -596,7 +664,7 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
 
             // Try to load the a package matching the name of our own package
             PackageInfo pInfo;
-            String versionInfo = "1.0.6.1";
+            String versionInfo = "1.0.6.2";
             int msgPadding = 5;
 
             String aboutTitle = context.getString(R.string.dwdemo2_about_title);
@@ -712,11 +780,17 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
 
                     if (status != null && type != null) {
                         if (type.equals(RWDemoIntentParams.NOTIFICATION_TYPE_SCANNER)) {
-                            scannerStatus.setText("S: " + status);
+                            scannerStateText = status;
+                            updateScannerStatus();
                         } else if (type.equals(RWDemoIntentParams.NOTIFICATION_TYPE_RFID)) {
                             if (status.equalsIgnoreCase("SCANNING")) {
+                                if (!isReadingSessionActive) {
+                                    clearReadResults();
+                                }
+                                isReadingSessionActive = true;
                                 rfidStatus.setText("RFID: reading");
                             } else if (status.equalsIgnoreCase("WAITING") || status.equalsIgnoreCase("READY")) {
+                                isReadingSessionActive = false;
                                 rfidStatus.setText("RFID: stopped");
                             } else {
                                 rfidStatus.setText("RFID: " + status);

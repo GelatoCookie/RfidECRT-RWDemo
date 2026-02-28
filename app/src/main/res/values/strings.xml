@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="dwdemo2_app_name">Rfid DW Demo v0.1</string>
+    <string name="dwdemo2_app_name">Rfid DW Demo</string>
     <string name="app_name">RFIDSolution</string>
     <!-- Title for Latin keyboard  -->
     <string name="ime_name">Sample Soft Keyboard</string>

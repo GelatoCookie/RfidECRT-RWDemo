@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="rwdemo_app_name">Rfid DW Demo v0.1</string>
+    <string name="rwdemo_app_name">Rfid DW Demo</string>
     <string name="dwdemo2_version" translatable="false">1.0</string>
     <string name="dwdemo2_textview_text">Hello world!</string>
     <string name="dwdemo_title">RFIDWedge Demonstration</string>
-    <string name="dwdemo_copyright">\u00A9 2019 Zebra Technologies Corporation and/or its affiliates.</string>
+    <string name="dwdemo_copyright">\u00A9 2026 Zebra Technologies Corporation and/or its affiliates.</string>
     <string name="dwdemo_intro">RWDemo allows you to add RFID data capture capability to any application without writing code. Launch your application, press the trigger and RFIDWedge types the tag data into your application.</string>
     <string name="dwdemo2_action_illumination">Illumination</string>
     <string name="dwdemo2_action_scanner">Scanner</string>
@@ -17,7 +17,7 @@
     <string name="dwdemo2_about_title">About RWDemo</string>
     <string name="dwdemo2_about_version">"Version: %s"</string>
     <string name="dwdemo2_about_text">ECRT RWDemo is an application that uses DataWedge to read RFID tag data and Barcode. RWDemo uses the DataWedge Intent output plug-in to receive data.\nTested TC22R</string>
-    <string name="dwdemo2_about_copyright" translatable="false">\u00A9 2019 Zebra Technologies Corporation and/or its affiliates.</string>
+    <string name="dwdemo2_about_copyright" translatable="false">\u00A9 2026 Zebra Technologies Corporation and/or its affiliates.</string>
     <string name="dwdemo2_about_allrights">All rights reserved.</string>
 
     <!-- Friendly profiles -->
