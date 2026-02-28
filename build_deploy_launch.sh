@@ -6,7 +6,25 @@ set -e
 WORKDIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$WORKDIR"
 
-APP_ID="com.zebra.rfid.rwdemo.debug"
+BASE_APP_ID=$(grep -m1 'applicationId[[:space:]]*"' app/build.gradle | sed -E 's/.*applicationId[[:space:]]*"([^"]+)".*/\1/')
+DEBUG_SUFFIX=$(awk '
+  /buildTypes[[:space:]]*\{/ { inBuildTypes=1 }
+  inBuildTypes && /debug[[:space:]]*\{/ { inDebug=1; next }
+  inDebug && /applicationIdSuffix[[:space:]]*"/ {
+    if (match($0, /"[^"]+"/)) {
+      print substr($0, RSTART + 1, RLENGTH - 2)
+      exit
+    }
+  }
+  inDebug && /\}/ { inDebug=0 }
+' app/build.gradle)
+
+if [ -z "$BASE_APP_ID" ]; then
+  echo "Could not resolve applicationId from app/build.gradle"
+  exit 1
+fi
+
+APP_ID="${BASE_APP_ID}${DEBUG_SUFFIX}"
 
 # 1. Build the APK
 echo "Building APK..."
