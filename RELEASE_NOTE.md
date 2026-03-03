@@ -1,5 +1,24 @@
 # Release Note: 1.0.6.2
 
+# Release Note: test1
+
+# Release Note: 1.0.6.3
+
+## Version: 1.0.6.3
+
+- Improved RFID data handling logic for robustness and clarity.
+- Enhanced null checks and minimum data length validation in decode flow.
+- Updated documentation in `README.md` and `DESIGN.md` for new logic and flow summary.
+- General code cleanup and minor UI improvements.
+
+
+## Version: test1
+
+- Updated RFID data handling logic in `handleDecodeData`: added null check, debug logging, and minimum data length threshold (>4) for processing.
+- Updated deduplication and tag display logic to match new requirements.
+- Revised documentation in `README.md` and `DESIGN.md` to reflect code changes and flow summary.
+
+
 ## Version: 1.0.6.2
 
 - Added unique-tag display behavior in the result output (`output_view`) to prevent duplicate rows.
