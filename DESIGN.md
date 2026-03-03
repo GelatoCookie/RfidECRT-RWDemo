@@ -19,7 +19,7 @@ Current implementation focus:
 1. App registers receiver for DataWedge result + notification actions.
 2. App ensures `RWDemo` profile exists/active.
 3. DataWedge sends RFID payload in intent extras.
-4. `handleDecodeData(Intent)` parses payload and updates counters/output.
+4. `handleDecodeData(Intent)` parses payload, checks for null, logs data size, and updates counters/output if data length > 4.
 
 ## UI Contract
 
@@ -57,6 +57,7 @@ For each row:
 2. skip empty rows
 3. normalize dedupe key by removing whitespace and hyphen (`[\\s-]`)
 4. lowercase using `Locale.ROOT`
+5. Only process data if length > 4 (see handleDecodeData)
 
 Equivalent examples (same unique key):
 - `AB-CD`
@@ -82,7 +83,7 @@ Equivalent examples (same unique key):
 
 ### Expected runtime signals
 - `scannerStatus` changes with scanner notifications.
-- `rfidStatus` should move between `reading` and `stopped`.
+- `rfidStatus` should move between `reading` and `stopped`. Data is only processed if length > 4.
 - `readCountStatus` should increment on incoming data (`Total`) and first-seen tags (`Unique`).
 
 ### Quick verification sequence

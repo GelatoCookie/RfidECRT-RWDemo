@@ -54,7 +54,7 @@ Flow summary:
 - Register DataWedge receivers and request profile state.
 - Ensure `RWDemo` profile exists and activate soft scan trigger.
 - Receive scanner/RFID/reader notifications and update status UI.
-- Handle RFID intent payloads, dedupe tag rows, and update `Total`/`Unique` counters.
+- Handle RFID intent payloads: check for null, log data size, dedupe tag rows, and update `Total`/`Unique` counters only if data length > 4.
 
 ## Notes
 - Android 13+ receiver registration path is supported.

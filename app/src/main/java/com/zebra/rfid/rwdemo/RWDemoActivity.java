@@ -611,7 +611,14 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
         if (i == null)
             return;
 
-        String data = i.getStringExtra(DATA_STRING_TAG);
+        final String data = i.getStringExtra(DATA_STRING_TAG);
+
+
+
+        if(data == null)
+            return;
+
+        Log.d(TAG, "ECRT: handleDecodeData data:" + data + " size:" + data.length());
 
         String source = i.getStringExtra(SOURCE_TAG);
         if (source == null)
@@ -625,13 +632,14 @@ public class RWDemoActivity extends Activity implements OnClickListener,    OnMe
             if (source.equalsIgnoreCase(SOURCE_MSR)) {
                 byte[] rawData = i.getByteArrayExtra(MSR_DATA_TAG);
                 if (rawData != null) {
-                    data = DATA_MSR;    //convert(rawData);
+                    //data = DATA_MSR;    //convert(rawData);
                     data_len = data.length();
                 }
             }
         }
 
-        if (data_len > 0) {
+        //ECRT: handleDecodeData data:null size:4
+        if (data_len > 4) {
             rfidStatus.setText("RFID: reading");
             String newUniqueData = getNewUniqueReadsForDisplay(data);
             updateReadCountStatus();
